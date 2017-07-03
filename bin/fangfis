@@ -1,0 +1,35 @@
+#!/usr/bin/env node
+
+const program = require('commander');
+const path = require('path');
+const chalk = require('chalk');
+
+process.env.NODE_PATH = path.join(__dirname, '/../node_modules/');
+
+program
+    .version(require('../package').version);
+
+program
+    .usage('<command>');
+
+program
+    .command('init [-t]')
+    .option('-n, --notemplate', 'not generate a sample template')
+    .description('Generate a new project')
+    .alias('i')
+    .action((env, options) => {
+        require('../command/init')(options);
+    }).on('--help', function () {
+        console.log(chalk.green('  Examples: '));
+        console.log(chalk.green('           fang init -t'));
+        console.log(chalk.green('           fang init -h'));
+    });
+program.parse(process.argv);
+program.on('--help', function () {
+    console.log(chalk.green('  Please contact me if you have any questions. '));
+    console.log(chalk.green('  mail: tankunpeng@fang.com '));
+});
+
+if (!program.args.length) {
+    program.help();
+}

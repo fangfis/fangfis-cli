@@ -1,0 +1,21 @@
+{
+  "presets": [
+    ["env", {
+      "targets": {
+        "browsers": [
+          "safari >= 7",
+          "ie >= 9",
+          "chrome >= 42",
+          "firefox >= 40"
+          ]
+      }
+    }]
+  ],
+  "plugins": [
+    "transform-es3-property-literals",
+    "transform-es3-member-expression-literals",
+    ["transform-es2015-modules-commonjs-simple", {
+      "noMangle": true
+    }]
+  ]
+}
