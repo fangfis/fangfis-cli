@@ -1,4 +1,4 @@
-# fangfis-cli
+# fangfis
 fang.com PC project framework
 > A simple CLI for fang.com PC project.
 
