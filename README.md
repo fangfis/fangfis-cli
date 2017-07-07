@@ -8,6 +8,7 @@ Prerequisites: [Node.js](https://nodejs.org/en/) (>=4.x, 6.x preferred), npm ver
 
 ``` bash
 $ npm install -g fangfis
+
 ```
 
 ### Usage
