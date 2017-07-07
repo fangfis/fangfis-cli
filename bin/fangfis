@@ -1,35 +1,56 @@
 #!/usr/bin/env node
 
 const program = require('commander');
-const path = require('path');
 const chalk = require('chalk');
 
-process.env.NODE_PATH = path.join(__dirname, '/../node_modules/');
+const pkg = require('../package.json');
+const version = pkg.version;
 
 program
-    .version(require('../package').version);
+    .version(version, '    --version')
+    .usage('[options] [dir]');
+    // .option('-i, --init', 'Generate a new project')
 
 program
     .usage('<command>');
 
 program
-    .command('init [-t]')
-    .option('-n, --notemplate', 'not generate a sample template')
+    .command('init')
     .description('Generate a new project')
     .alias('i')
-    .action((env, options) => {
-        require('../command/init')(options);
+    .action(() => {
+        require('../command/init')();
     }).on('--help', function () {
         console.log(chalk.green('  Examples: '));
         console.log(chalk.green('           fang init -t'));
         console.log(chalk.green('           fang init -h'));
     });
-program.parse(process.argv);
+
+program
+    .command('build')
+    .description('build the project')
+    .alias('b')
+    .action((env, options) => {
+        require('../command/build')(options);
+    }).on('--help', function () {
+        console.log(chalk.green('  Examples: '));
+        console.log(chalk.green('           fang init -t'));
+        console.log(chalk.green('           fang init -h'));
+    });
+
+
 program.on('--help', function () {
-    console.log(chalk.green('  Please contact me if you have any questions. '));
-    console.log(chalk.green('  mail: tankunpeng@fang.com '));
+    console.log('');
+    console.log(chalk.green('  Examples:'));
+    console.log(chalk.green('    fangfis init  Create the necessary directory structure'));
+    console.log(chalk.green('    fangfis bulid [-w] -w: Monitor the current project file changes and build them automatically'));
+    console.log('');
+    console.log(chalk.yellow('  Please contact me if you have any questions. '));
+    console.log(chalk.yellow('  mail: yueyanlei@fang.com '));
 });
+program.parse(process.argv);
 
 if (!program.args.length) {
     program.help();
 }
+

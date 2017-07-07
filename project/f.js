@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 /**
- * @license r.js 2.3.3 Copyright jQuery Foundation and other contributors.
- * Released under MIT license, http://github.com/requirejs/r.js/LICENSE
+ * @license f.js 2.3.3 Copyright jQuery Foundation and other contributors.
+ * Released under MIT license, http://github.com/fangjs/f.js/LICENSE
  */
 
 /*
  * This is a bootstrap script to allow running RequireJS in the command line
  * in either a Java/Rhino or Node environment. It is modified by the top-level
  * dist.js file to inject other files to completely enable this file. It is
- * the shell of the r.js file.
+ * the shell of the f.js file.
  */
 
 /*jslint evil: true, nomen: true, sloppy: true */
@@ -31,7 +31,7 @@ var requirejs, require, define, xpcUtil;
         readFile = typeof readFileFunc !== 'undefined' ? readFileFunc : null;
 
     function showHelp() {
-        console.log('See https://github.com/requirejs/r.js for usage.');
+        console.log('See https://github.com/fangjs/f.js for usage.');
     }
 
     if (typeof process !== 'undefined' && process.versions && !!process.versions.node) {
@@ -250,7 +250,7 @@ var requirejs, require, define, xpcUtil;
 
     /** vim: et:ts=4:sw=4:sts=4
  * @license RequireJS 2.3.3 Copyright jQuery Foundation and other contributors.
- * Released under MIT license, https://github.com/requirejs/requirejs/blob/master/LICENSE
+ * Released under MIT license, https://github.com/fangjs/fangjs/blob/master/LICENSE
  */
 //Not using strict: uneven strict support in browsers, #392, and causes
 //problems with requirejs.exec()/transpiler plugins that may not be strict.
@@ -2162,11 +2162,11 @@ var requirejs, require, define, xpcUtil;
             if (node.attachEvent &&
                     //Check if node.attachEvent is artificially added by custom script or
                     //natively supported by browser
-                    //read https://github.com/requirejs/requirejs/issues/187
+                    //read https://github.com/fangjs/fangjs/issues/187
                     //if we can NOT find [native code] then it must NOT natively supported.
                     //in IE8, node.attachEvent does not have toString()
                     //Note the test for "[native code" with no closing brace, see:
-                    //https://github.com/requirejs/requirejs/issues/273
+                    //https://github.com/fangjs/fangjs/issues/273
                     !(node.attachEvent.toString && node.attachEvent.toString().indexOf('[native code') < 0) &&
                     !isOpera) {
                 //Probably IE. IE (at least 6-8) do not fire
@@ -2450,15 +2450,15 @@ var requirejs, require, define, xpcUtil;
 
         //Explicity not strict since this file contains an eval call, and do not want
 //to enforce strict on code evaluated that way. See
-//https://github.com/requirejs/r.js/issues/774
+//https://github.com/fangjs/f.js/issues/774
 /*jslint regexp: false, sloppy: true*/
-/*global require: false, define: false, requirejsVars: false, process: false */
+/*global require: false, define: false, fangjsVars: false, process: false */
 
 /**
  * This adapter assumes that x.js has loaded it and set up
  * some variables. This adapter just allows limited RequireJS
  * usage from within the requirejs directory. The general
- * node adapater is r.js.
+ * node adapater is f.js.
  */
 
 (function () {
@@ -2918,7 +2918,7 @@ define('lang', function () {
 /**
  * prim 0.0.1 Copyright (c) 2012-2014, The Dojo Foundation All Rights Reserved.
  * Available via the MIT or new BSD license.
- * see: http://github.com/requirejs/prim for details
+ * see: http://github.com/fangjs/prim for details
  */
 
 /*global setImmediate, process, setTimeout, define, module */
@@ -3170,7 +3170,7 @@ if(env === 'node') {
 /*global define: false, process: false */
 
 define('node/args', function () {
-    //Do not return the "node" or "r.js" arguments
+    //Do not return the "node" or "f.js" arguments
     var args = process.argv.slice(2);
 
     //Ignore any command option used for main x.js branching
@@ -23674,15 +23674,7 @@ define('parse', ['./esprimaAdapter', 'lang'], function (esprima, lang) {
         if (node) {
             this.findRequireDepNames(node, deps);
 
-            //If no deps, still add the standard CommonJS require, exports,
-            //module, in that order, to the deps, but only if specified as
-            //function args. In particular, if exports is used, it is favored
-            //over the return value of the function, so only add it if asked.edited by lyno
-            // funcArgLength = node.params && node.params.length;
-            // if (funcArgLength) {
-            //     deps = (funcArgLength > 1 ? ["require", "exports", "module"] :
-            //             ["require"]).concat(deps);
-            // }
+
         }
         return deps;
     };
@@ -23801,7 +23793,7 @@ define('parse', ['./esprimaAdapter', 'lang'], function (esprima, lang) {
     };
 
     /**
-     * Renames require/requirejs/define calls to be ns + '.' + require/requirejs/define
+     * Renames require/fangjs/define calls to be ns + '.' + require/fangjs/define
      * Does *not* do .config calls though. See pragma.namespace for the complete
      * set of namespace transforms. This function is used because require calls
      * inside a define() call should not be renamed, so a simple regexp is not
@@ -25812,7 +25804,7 @@ define('requirePatch', [ 'env!env/file', 'pragma', 'parse', 'lang', 'logger', 'c
 
             //create local undefined values for module and exports,
             //so that when files are evaled in this function they do not
-            //see the node values used for r.js
+            //see the node values used for f.js
             exports,
             module;
 
@@ -26443,13 +26435,20 @@ define('build', function (require) {
             });
         }
     };
-
+// node f.js name=detail/entry_dsdetail_main out=static/js/detail/entry_dsdetail_main.js
     function makeBuildBaseConfig() {
         return {
+            baseUrl: './dev/js',
+            excludeShallow: ['jquery'],
+            name: 'detail/entry_main',
+            out: 'static/js/detail/entry_main.js',
             appDir: "",
             pragmas: {},
-            paths: {},
-            optimize: "uglify",
+            paths: {
+                jquery: 'empty:',
+                util: 'plugins/util'
+            },
+            optimize: "none",//uglify
             optimizeCss: "standard.keepLines.keepWhitespace",
             inlineText: true,
             isBuild: true,
@@ -26465,7 +26464,6 @@ define('build', function (require) {
             _buildPathToModuleIndex: {}
         };
     }
-
     /**
      * Some JS may not be valid if concatenated with other JS, in particular
      * the style of omitting semicolons and rely on ASI. Add a semicolon in
@@ -27950,7 +27948,7 @@ define('build', function (require) {
         //Track the deps, but in a different key, so that they are not loaded
         //as part of config seeding before all config is in play (#648). Was
         //going to merge this in with "include", but include is added after
-        //the "name" target. To preserve what r.js has done previously, make
+        //the "name" target. To preserve what f.js has done previously, make
         //sure "deps" comes before the "name".
         if (config.deps) {
             config._depsInclude = config.deps;
@@ -28720,7 +28718,7 @@ function (args, quit, logger, build) {
 
 
     } else if (commandOption === 'v') {
-        console.log('r.js: ' + version +
+        console.log('f.js: ' + version +
                     ', RequireJS: ' + this.requirejsVars.require.version +
                     ', UglifyJS: 2.7.5');
     } else if (commandOption === 'convert') {
