@@ -7,13 +7,13 @@ fang.com PC project framework
 Prerequisites: [Node.js](https://nodejs.org/en/) (>=4.x, 6.x preferred), npm version 3+ and [Git](https://git-scm.com/).
 
 ``` bash
-$ npm install -g fangfis-cli
+$ npm install -g fangfis
 ```
 
 ### Usage
 
 ``` bash
-$ fangfis init [-n]
+$ fangfis init
 ```
 
 Example:
@@ -22,29 +22,20 @@ Example:
 $ fangfis init
 ```
 
-> pay attention: If you need to view the demo locally, please follow the steps below
 
-1. Configure the local domain name `js.npm.com`;
-2. Point the local domain name to the parent directory of the project;
-3. Go to the project root and execute `npm install`;
-4. In the project root directory execute `gulp`;
-5. It is recommended to configure the local domain name to access the index.html file under the demo
+### fangfis build
 
-
-If you do not need to generate the demo template `fangfis init`, you can append the `-n` parameter,The default build demo;
+Use fangfis as a zero-configuration development tool for your fang.com component.
 
 Example:
 
 ``` bash
-$ fangfis init -n
+    fangfis bulid          Deal with the current project under dev folder all the files (css, img, js)
+    fangfis bulid [-w] -w: Monitor the current project file changes and build them automatically
+    fangfis bulid [-j] -j: Compressed JavaScript file (don\'t begin with entery_ JavaScript files)
+    fangfis bulid [-c] -c: Compressed css file
+    fangfis bulid [-i] -i: To copy images to the static files (not compressed)
 ```
-
-
-
-### fangfis build
-
-Use fangfis-cli as a zero-configuration development tool for your fang.com component.
-
 
 > The actual development of the html entry file must be configured with the following information, otherwise it will lead to errors
 

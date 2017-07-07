@@ -45,13 +45,14 @@ program.on('--help', function () {
     console.log('');
     console.log(chalk.green('  Examples:'));
     console.log(chalk.green('    fangfis init  Create the necessary directory structure'));
+    console.log(chalk.green('    fangfis bulid          Deal with the current project under dev folder all the files (css, img, js)'));
     console.log(chalk.green('    fangfis bulid [-w] -w: Monitor the current project file changes and build them automatically'));
     console.log(chalk.green('    fangfis bulid [-j] -j: Compressed JavaScript file (don\'t begin with entery_ JavaScript files)'));
     console.log(chalk.green('    fangfis bulid [-c] -c: Compressed css file'));
     console.log(chalk.green('    fangfis bulid [-i] -i: To copy images to the static files (not compressed)'));
     console.log('');
     console.log(chalk.yellow('  Please contact me if you have any questions. '));
-    console.log(chalk.yellow('  mail: yueyanlei@fang.com '));
+    console.log(chalk.yellow('  mail: yueyanlei@fang.com,tankunpeng@fang.com '));
 });
 program.parse(process.argv);
 
