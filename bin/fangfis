@@ -22,20 +22,22 @@ program
         require('../command/init')();
     }).on('--help', function () {
         console.log(chalk.green('  Examples: '));
-        console.log(chalk.green('           fang init -t'));
-        console.log(chalk.green('           fang init -h'));
+        console.log(chalk.green('           fangfis init -h'));
     });
 
 program
     .command('build')
     .description('build the project')
+    .option('-w, --watch', 'Monitor the current project file changes and build them automatically')
+    .option('-j, --js', 'Compressed JavaScript file (don\'t begin with entery_ JavaScript files)')
+    .option('-c, --css', 'Compressed css file')
+    .option('-i, --img', 'To copy images to the static files (not compressed)')
     .alias('b')
-    .action((env, options) => {
+    .action((options) => {
         require('../command/build')(options);
     }).on('--help', function () {
         console.log(chalk.green('  Examples: '));
-        console.log(chalk.green('           fang init -t'));
-        console.log(chalk.green('           fang init -h'));
+        console.log(chalk.green('           fangfis init -h'));
     });
 
 
@@ -44,6 +46,9 @@ program.on('--help', function () {
     console.log(chalk.green('  Examples:'));
     console.log(chalk.green('    fangfis init  Create the necessary directory structure'));
     console.log(chalk.green('    fangfis bulid [-w] -w: Monitor the current project file changes and build them automatically'));
+    console.log(chalk.green('    fangfis bulid [-j] -j: Compressed JavaScript file (don\'t begin with entery_ JavaScript files)'));
+    console.log(chalk.green('    fangfis bulid [-c] -c: Compressed css file'));
+    console.log(chalk.green('    fangfis bulid [-i] -i: To copy images to the static files (not compressed)'));
     console.log('');
     console.log(chalk.yellow('  Please contact me if you have any questions. '));
     console.log(chalk.yellow('  mail: yueyanlei@fang.com '));

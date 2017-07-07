@@ -127,6 +127,7 @@ function createApplication(name, dir) {
         console.log(chalk.green('  if installed automatically fails, you can also perform the following commands installed manually \n  ' + prompt + ' cd ' + dir + ' && npm install'));
         console.log('');
         console.log(chalk.cyan('\n Start install npm packages...'));
+        console.log(chalk.yellow('\n Please wait patiently because you have more packages...'));
         exec(`cd ${dir} && npm install`, (error, stdout, stderr) => {
             if (error) {
                 console.log(error);
@@ -169,7 +170,6 @@ module.exports = () => {
             // Path
             let destinationPath = yield prompt('Project name (default:): ');
             destinationPath = destinationPath || '.';
-            console.log(path.resolve(destinationPath));
             // App name
             let appName = createAppName(path.resolve(process.cwd(), destinationPath)) || 'fangfis-build';
             // Generate application

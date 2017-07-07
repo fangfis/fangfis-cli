@@ -1,8 +1,6 @@
 /*
  创建Gulp配置文件
  */
-// process.chdir(process.cwd() + '/node_modules/');
-console.log(123);
 const basePath = process.cwd() + '/node_modules/';
 // 引入 gulp
 const gulp = require(basePath + 'gulp');
@@ -37,7 +35,7 @@ let paths = {
 };
 
 let gulpBuild = {
-    css: function (fn) {
+    css: function () {
         console.log(chalk.yellow('[进行中] css'));
         return gulp.src(paths.css)
             .pipe(changed(`${paths.static}/css/`))
@@ -56,10 +54,9 @@ let gulpBuild = {
             .pipe(gulp.dest(`${paths.static}/css/`))
             .on('end', function () {
                 console.log(chalk.green('[已完成] css'));
-                fn && fn();
             });
     },
-    img: function (fn) {
+    img: function () {
         console.log(chalk.yellow('[进行中] img'));
         return gulp.src(paths.img)
             .pipe(changed(`${paths.static}/images/`))
@@ -67,11 +64,9 @@ let gulpBuild = {
             .pipe(gulp.dest(`${paths.static}/images/`))
             .on('end', function () {
                 console.log(chalk.green('[已完成] img'));
-                fn && fn();
             });
     },
-    js: function (fn) {
-        console.log(process.cwd());
+    js: function () {
         console.log(chalk.yellow('[进行中] js(!entry_*.js ES6->ES5)'));
         return gulp.src(paths.js)
             .pipe(through.obj(function (file, encoding, callback) {
@@ -94,10 +89,9 @@ let gulpBuild = {
             .pipe(gulp.dest(`${paths.static}/js/`))
             .on('end', function () {
                 console.log(chalk.green('[已完成] js(!entry_*.js ES6->ES5)'));
-                fn && fn();
             });
     },
-    jsNo: function (fn) {
+    jsNo: function () {
         console.log(chalk.yellow('[进行中] js(jsNo处理)'));
         return gulp.src([paths.nojs, `!${paths.js}`])
             .pipe(changed(`${paths.static}/js/`))
@@ -105,10 +99,9 @@ let gulpBuild = {
             .pipe(gulp.dest(`${paths.static}/js/`))
             .on('end', function () {
                 console.log(chalk.green('[已完成] js(jsNo处理)'));
-                fn && fn();
             });
     },
-    fjs: function (fn) {
+    fjs: function () {
         console.log(chalk.yellow('[进行中] fjs(entry_*.js)'));
         let that = this;
         return gulp.src(paths.js)
@@ -128,10 +121,10 @@ let gulpBuild = {
             ]))
             .on('end', function () {
                 console.log(chalk.green('[已完成] fjs(entry_*.js combo)'));
-                that.uglifyTask(fn);
+                that.uglifyTask();
             });
     },
-    uglifyTask: function (fn) {
+    uglifyTask: function () {
         return gulp.src(`${paths.static}/js/**/entry_*.js`)
             .pipe(babel())
             .pipe(uglify({
@@ -143,16 +136,32 @@ let gulpBuild = {
             .pipe(gulp.dest(`${paths.static}/js/`))
             .on('end', function () {
                 console.log(chalk.green('[已完成] fjs(entry_*.js combo and ES6->ES5)'));
-                fn && fn();
             });
     },
-    default: function (fn) {
+    watch: function () {
+        var that = this;
+        gulp.watch(paths.css, function (event) {
+            console.log(chalk.green('File ' + event.path + ' was ' + event.type + ', running tasks => css'));
+            that.css();
+        });
+        gulp.watch(paths.img, function (event) {
+            console.log(chalk.green('File ' + event.path + ' was ' + event.type + ', running tasks => img'));
+            that.img();
+        });
+        gulp.watch(paths.js, function (event) {
+            console.log(chalk.green('File ' + event.path + ' was ' + event.type + ', running tasks => js,jsNo,fjs'));
+            that.js();
+            that.jsNo();
+            that.fjs();
+        });
+    },
+    default: function () {
         let that = this;
-        that.css(fn);
-        that.img(fn);
-        that.js(fn);
-        that.jsNo(fn);
-        that.fjs(fn);
+        that.css();
+        that.img();
+        that.js();
+        that.jsNo();
+        that.fjs();
     }
 };
 

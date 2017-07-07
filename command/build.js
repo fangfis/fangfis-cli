@@ -4,9 +4,21 @@
 */
 const co = require('co');
 const gulpbuild = require('../project/gulpbuild');
-module.exports = () => {
+module.exports = (ops) => {
     co(function* () {
-        console.log(gulpbuild.default);
-        gulpbuild.default();
+        var eventStr = 'css js img';
+        if (!ops || typeof ops !== 'object') {
+            gulpbuild.default();
+        } else if (ops.watch) {
+            gulpbuild.watch();
+            gulpbuild.default();
+        } else {
+            eventStr.replace(/\w+/g, function (key) {
+                if (ops.hasOwnProperty(key)) {
+                    gulpbuild[key]();
+                }
+            });
+        }
+
     });
 };
