@@ -2,10 +2,10 @@
 fang.com PC project framework
 > A simple CLI for fang.com PC project.
 
-### Installation
-
 Prerequisites: [Node.js](https://nodejs.org/en/) (>=4.x, 6.x preferred), npm version 3+ and [Git](https://git-scm.com/).
 test
+
+### Installation
 
 ``` bash
 $ npm install -g fangfis
