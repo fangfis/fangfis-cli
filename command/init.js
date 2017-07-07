@@ -134,7 +134,7 @@ function createApplication(name, dir) {
             }
             console.log(chalk.green(' ' + stdout));
             console.log(chalk.yellow(' ' + stderr));
-            console.log(chalk.green(` now you can go to the directory '/${dir}'  to see if the folder 'node_modules' is present to verify\n that the installation is successful; if it does not exist or error, please install it manually.`));
+            console.log(chalk.green(` now you can go to the directory '${dir}/'  to see if the folder 'node_modules' is present to verify\n that the installation is successful; if it does not exist or error, please install it manually.`));
             exit();
         });
     }
