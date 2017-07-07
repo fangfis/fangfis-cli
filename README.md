@@ -17,13 +17,6 @@ $ npm install -g fangfis
 $ fangfis init
 ```
 
-Example:
-
-``` bash
-$ fangfis init
-```
-
-
 ### fangfis build
 
 Use fangfis as a zero-configuration development tool for your fang.com component.
