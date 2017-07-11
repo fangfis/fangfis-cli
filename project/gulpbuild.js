@@ -8,6 +8,8 @@ const gulp = require(basePath + 'gulp');
 // 引入功能组件
 const uglify = require(basePath + 'gulp-uglify');
 const babel = require(basePath + 'gulp-babel');
+const sourcemaps = require(basePath + 'gulp-sourcemaps');
+const replace = require(basePath + 'gulp-replace');
 
 const changed = require(basePath + 'gulp-changed');
 const through = require(basePath + 'through2');
@@ -80,12 +82,15 @@ let gulpBuild = {
             .pipe(changed(`${paths.static}/js/`))
             .pipe(plumber())
             .pipe(babel())
+            .pipe(sourcemaps.init())
             .pipe(uglify({
                 mangle: true,
                 output: {
                     ascii_only: true
                 }
             }))
+            .pipe(sourcemaps.write('./maps'))
+            .pipe(replace(/\.js\.map(\?_\w+)?/g, '.js.map?_' + Math.random().toString(32).substring(2)))
             .pipe(gulp.dest(`${paths.static}/js/`))
             .on('end', function () {
                 console.log(chalk.green('[已完成] js(!entry_*.js ES6->ES5)'));
@@ -127,12 +132,15 @@ let gulpBuild = {
     uglifyTask: function () {
         return gulp.src(`${paths.static}/js/**/entry_*.js`)
             .pipe(babel())
+            .pipe(sourcemaps.init())
             .pipe(uglify({
                 mangle: true,
                 output: {
                     ascii_only: true
                 }
             }))
+            .pipe(sourcemaps.write('./maps'))
+            .pipe(replace(/\.js\.map(\?_\w+)?/g, '.js.map?_' + Math.random().toString(32).substring(2)))
             .pipe(gulp.dest(`${paths.static}/js/`))
             .on('end', function () {
                 console.log(chalk.green('[已完成] fjs(entry_*.js combo and ES6->ES5)'));
