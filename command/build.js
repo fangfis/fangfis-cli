@@ -7,7 +7,6 @@ const gulpbuild = require('../project/gulpbuild');
 module.exports = (ops) => {
     co(function* () {
         var eventStr = 'css js img';
-        console.log(ops);
         var hasOps = false;
         if (ops.watch) {
             hasOps = true;
