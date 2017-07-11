@@ -7,18 +7,22 @@ const gulpbuild = require('../project/gulpbuild');
 module.exports = (ops) => {
     co(function* () {
         var eventStr = 'css js img';
-        if (!ops || typeof ops !== 'object') {
-            gulpbuild.default();
-        } else if (ops.watch) {
+        console.log(ops);
+        var hasOps = false;
+        if (ops.watch) {
+            hasOps = true;
             gulpbuild.watch();
             gulpbuild.default();
-        } else {
+        }else {
             eventStr.replace(/\w+/g, function (key) {
                 if (ops.hasOwnProperty(key)) {
+                    hasOps = true;
                     gulpbuild[key]();
                 }
             });
         }
-
+        if (!hasOps) {
+            gulpbuild.default();
+        }
     });
 };

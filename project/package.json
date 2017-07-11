@@ -31,8 +31,10 @@
     "gulp-changed": "^3.1.0",
     "gulp-clean-css": "^3.4.1",
     "gulp-csscomb": "^3.0.8",
+    "gulp-replace": "^0.5.4",
     "gulp-plumber": "^1.1.0",
     "gulp-shell": "^0.6.3",
+    "gulp-sourcemaps": "^2.4.1",
     "gulp-uglify": "^3.0.0",
     "through2": "^2.0.3"
   },
