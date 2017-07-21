@@ -8,9 +8,10 @@ const mkdirp = require('mkdirp');
 const download = require('download-git-repo');
 const MODE_0666 = parseInt('0666', 8);
 const MODE_0755 = parseInt('0755', 8);
-
 const _exit = process.exit;
-const exec = require('child_process').exec;
+const spawn = require('child_process').spawn;
+const ora = require('ora');
+let spinner;
 /**
  * Graceful exit for async STDIO
  */
@@ -122,19 +123,39 @@ function createApplication(name, dir) {
     function complete() {
         if (--wait) return;
         var prompt = launchedFromCmd() ? '>' : '$';
-        console.log('');
-        console.log(chalk.gray(' install npm packages:'));
-        console.log(chalk.green('  if installed automatically fails, you can also perform the following commands installed manually \n  ' + prompt + ' cd ' + dir + ' && npm install'));
-        console.log('');
-        console.log(chalk.cyan('\n Start install npm packages...'));
-        console.log(chalk.yellow('\n Please wait patiently because you have more packages...'));
-        exec(`cd ${dir} && npm install`, (error, stdout, stderr) => {
-            if (error) {
-                console.log(error);
+        console.log(chalk.gray(' prompt:'), chalk.green('  if installed automatically fails, you can also perform the following commands installed manually \n  ' + prompt + ' cd ' + dir + ' && npm install'));
+        spinner.start('Install npm packages...');
+        console.log(dir);
+        const install = spawn('npm', ['install', '--registry=https://registry.npm.taobao.org'], {
+            shell: true,
+            cwd: dir
+        });
+        var stdoutStr = '';
+        var stderrStr = '';
+        install.stdout.on('data', (data) => {
+            stdoutStr += data;
+            var str = stdoutStr.toString();
+            if (/\n/.test(stdoutStr)) {
+                console.log(chalk.green(' ' + str.replace(/\n/g, '')));
+                stdoutStr = '';
             }
-            console.log(chalk.green(' ' + stdout));
-            console.log(chalk.yellow(' ' + stderr));
-            console.log(chalk.green(` now you can go to the directory '${dir}/'  to see if the folder 'node_modules' is present to verify\n that the installation is successful; if it does not exist or error, please install it manually.`));
+        });
+
+        install.stderr.on('data', (data) => {
+            stderrStr += data;
+            var str = stderrStr.toString();
+            if (/\n/.test(stderrStr)) {
+                console.log(chalk.yellow(' ' + str.replace(/\n/g, '')));
+                stderrStr = '';
+            }
+        });
+
+        install.on('close', (code) => {
+            spinner.succeed('Install successful');
+            exit(code);
+        });
+        install.on('error', function () {
+            spinner.fail('Install failed');
             exit();
         });
     }
@@ -156,9 +177,15 @@ function createApplication(name, dir) {
         //     copyTemplate(name, path + '/' + name);
         // });
         complete();
-
-        download('fangjs/f.js', path.resolve(__dirname,'../project'), function (err) {
-            if (err) throw err;
+        setTimeout(function () {
+            spinner = ora('Downloading dependency package...').start();
+        }, 300);
+        download('fangjs/f.js', path.resolve(__dirname, '../project'), function (err) {
+            if (err) {
+                spinner.fail('Download failed');
+                throw err;
+            }
+            spinner.succeed('Download successful');
             complete();
         });
     });
@@ -177,7 +204,8 @@ module.exports = () => {
             if (isEmpty) {
                 createApplication(appName, destinationPath);
             } else {
-                let isContinue = /^y|yes|ok|true$/i.test(yield prompt('destination is not empty, continue? [Y/N]'));
+                let answer = yield prompt('destination is not empty, continue? [Y/N]');
+                let isContinue = /^y|yes|ok|true|\s{0}$/i.test(answer);
                 if (isContinue) {
                     createApplication(appName, destinationPath);
                 } else {

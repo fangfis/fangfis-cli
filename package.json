@@ -1,6 +1,6 @@
 {
   "name": "fangfis",
-  "version": "0.0.4",
+  "version": "0.1.0",
   "author": "@tankunpeng",
   "homepage": "http://npmjs.com/~tankunpeng",
   "description": "front-end development framework",
@@ -34,6 +34,7 @@
     "commander": "^2.9.0",
     "download-git-repo": "^1.0.1",
     "graceful-fs": "^4.1.11",
-    "mkdirp": "0.5.1"
+    "mkdirp": "0.5.1",
+    "ora": "^1.3.0"
   }
 }
