@@ -20,9 +20,6 @@ program
     .alias('i')
     .action(() => {
         require('../command/init')();
-    }).on('--help', function () {
-        console.log(chalk.green('  Examples: '));
-        console.log(chalk.green('           fangfis init -h'));
     });
 
 program
@@ -30,29 +27,30 @@ program
     .description('build the project')
     .option('-w, --watch', 'Monitor the current project file changes and build them automatically')
     .option('-j, --js', 'Compressed JavaScript file (don\'t begin with entery_ JavaScript files)')
+    .option('-a, --alljs', 'Compressed all JavaScript single file,The entry file will not be merged')
     .option('-c, --css', 'Compressed css file')
     .option('-i, --img', 'To copy images to the static files (not compressed)')
+    // .option('-i, --input [value]', 'Customize the input directory(reference https://www.npmjs.com/package/glob, eg: )')
+    .option('-o, --output [value]', 'Customize the output directory(eg: ./static)')
+    .option('-m, --main [value]', 'Customize the import module rules(Only support regular eg: /^entry_*/ig)')
     .alias('b')
     .action((options) => {
         require('../command/build')(options);
     }).on('--help', function () {
         console.log(chalk.green('  Examples: '));
-        console.log(chalk.green('           fangfis build -h'));
+        console.log(chalk.green('           fangfis build -o static -w -c'));
     });
 
 
 program.on('--help', function () {
     console.log('');
-    console.log(chalk.green('  Examples:'));
-    console.log(chalk.green('    fangfis init  Create the necessary directory structure'));
-    console.log(chalk.green('    fangfis bulid          Deal with the current project under dev folder all the files (css, img, js)'));
-    console.log(chalk.green('    fangfis bulid [-w] -w: Monitor the current project file changes and build them automatically'));
-    console.log(chalk.green('    fangfis bulid [-j] -j: Compressed JavaScript file (don\'t begin with entery_ JavaScript files)'));
-    console.log(chalk.green('    fangfis bulid [-c] -c: Compressed css file'));
-    console.log(chalk.green('    fangfis bulid [-i] -i: To copy images to the static files (not compressed)'));
+    console.log('  Examples:');
+    console.log('    fangfis init  -h   Get the init command help');
+    console.log('    fangfis bulid -h   Get the bulid command help');
     console.log('');
     console.log(chalk.yellow('  Please contact me if you have any questions. '));
     console.log(chalk.yellow('  mail: yueyanlei@fang.com,tankunpeng@fang.com '));
+    console.log(chalk.yellow('  issues: https://github.com/fangjs/fangfis/issues '));
 });
 program.parse(process.argv);
 
