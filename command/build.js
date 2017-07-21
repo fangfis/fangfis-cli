@@ -53,6 +53,7 @@ module.exports = (ops) => {
                 console.log('The input parameters(-m|--main) do not meet the requirements, eg: /^entry_*/img');
                 exit();
             }
+
         }
 
         eventStr.replace(/\w+/g, function (key) {
