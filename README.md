@@ -18,7 +18,7 @@ $ npm install -g fangfis
 $ fangfis init
 ```
 
-> 输入项目名称,默认为空即在当前文件夹下初始化 .
+> 输入项目名称,默认为空即在当前文件夹下初始化.
 
 ![](https://ws4.sinaimg.cn/large/006tKfTcly1fhrmfcug6mj307f012mwy.jpg)
 
@@ -28,7 +28,7 @@ $ fangfis init
 ![](https://ws1.sinaimg.cn/large/006tKfTcly1fhrmjshtbqj30p10b90t5.jpg)
 
 
-> 构建完成后默认自动安装所需要的依赖模块,如果自动安装失败,请进入该目录,手动安装,推荐使用`cnpm`安装 参考地址: [cnpm](https://npm.taobao.org/)
+> 构建完成后默认自动安装所需要的依赖模块,如果自动安装失败,请进入该目录,手动安装,推荐使用`cnpm`安装 参考地址: [cnpm](https://npm.taobao.org/)
 
 ``` bash
 $ npm install
@@ -52,10 +52,10 @@ $ cnpm install
 ``` bash
     -w, --watch           监听文件变化并自动构建
     -j, --js              压缩js文件到目标文件夹,入口文件`自动合并`所有依赖到目标文件夹,默认: static/js
-    -a, --alljs           压缩所有js文件到目标目录,输入目录为`dev/js`,不可自定义,入口文件作为单文件压缩,`不合并`所有依赖, 输出目录可自定义,默认: static/js
-    -c, --css             压缩所有css文件到目标目录,输入目录为`dev/css`,不可自定义,输出目录可自定义,默认: static/css
-    -i, --img             拷贝所有img文件到目标目录,输入目录为`dev/images`,不可自定义,输出目录可自定义,默认: static/imgages
-    -o, --output [value]  自定义输入目录,可自定义到一级,默认: ./static
+    -a, --alljs           压缩所有js文件到目标目录,输入目录为`dev/js`,不可自定义,入口文件作为单文件压缩,`不合并`所有依赖, 输出目录可自定义,默认: static/js
+    -c, --css             压缩所有css文件到目标目录,输入目录为`dev/css`,不可自定义,输出目录可自定义,默认: static/css
+    -i, --img             拷贝所有img文件到目标目录,输入目录为`dev/images`,不可自定义,输出目录可自定义,默认: static/imgages
+    -o, --output [value]  自定义输入目录,可自定义到一级,默认: ./static
     -m, --main [value]    自定义入口文件,只能传入正则表达式,默认: /^entry_.*\.js$/i
     -h, --help            帮助信息
 ```
