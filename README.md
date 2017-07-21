@@ -1,8 +1,9 @@
 # fangfis
-fang.com PC project framework
-> A simple CLI for fang.com PC project.
+fang.com 前端构建工具
 
-Prerequisites: [Node.js](https://nodejs.org/en/) (>=4.x, 6.x preferred), npm version 3+ and [Git](https://git-scm.com/) .
+> 前端构建工具使用pc+wap.
+
+前提条件: [Node.js](https://nodejs.org/en/) (>=4.x, 6.x), npm 版本 3+ and [Git](https://git-scm.com/) .
 
 ### Installation
 
@@ -17,49 +18,56 @@ $ npm install -g fangfis
 $ fangfis init
 ```
 
-### fangfis build
+> 输入项目名称,默认为空即在当前文件夹下初始化.
 
-Use fangfis as a zero-configuration development tool for your fang.com component.
+![suru](https://ws4.sinaimg.cn/large/006tKfTcly1fhrmfcug6mj307f012mwy.jpg)
 
-Example:
+
+> 该文件夹下不为空提示,可以选择继续,不会删除已有文件
+
+![](https://ws1.sinaimg.cn/large/006tKfTcly1fhrmjshtbqj30p10b90t5.jpg)
+
+
+> 构建完成后默认自动安装所需要的依赖模块,如果自动安装失败,请进入该目录,手动安装,推荐使用`cnpm`安装 参考地址: [cnpm](https://npm.taobao.org/)
 
 ``` bash
-    fangfis bulid          Deal with the current project under dev folder all the files (css, img, js)
-    fangfis bulid [-w] -w: Monitor the current project file changes and build them automatically
-    fangfis bulid [-j] -j: Compressed JavaScript file (don\'t begin with entery_ JavaScript files)
-    fangfis bulid [-c] -c: Compressed css file
-    fangfis bulid [-i] -i: To copy images to the static files (not compressed)
+$ npm install
+or
+$ cnpm install
+```
+> 初始化完成后的结构
+
+![](https://ws2.sinaimg.cn/large/006tKfTcly1fhrmsh929ij308q05c0sm.jpg)
+
+注:
+
+*dev文件夹目前版本为构建工具预留目录,所有开发项目请在该目录下开发*
+
+### fangfis build
+
+使用fangfis进行构建.
+
+构建选项如下:
+
+``` bash
+    -w, --watch           监听文件变化并自动构建
+    -j, --js              压缩js文件到目标文件夹,入口文件`自动合并`所有依赖到目标文件夹,默认: static/js
+    -a, --alljs           压缩所有js文件到目标目录,输入目录为`dev/js`,不可自定义,入口文件作为单文件压缩,`不合并`所有依赖, 输出目录可自定义,默认: static/js
+    -c, --css             压缩所有css文件到目标目录,输入目录为`dev/css`,不可自定义,输出目录可自定义,默认: static/css
+    -i, --img             拷贝所有img文件到目标目录,输入目录为`dev/images`,不可自定义,输出目录可自定义,默认: static/imgages
+    -o, --output [value]  自定义输入目录,可自定义到一级,默认: ./static
+    -m, --main [value]    自定义入口文件,只能传入正则表达式,默认: /^entry_.*\.js$/i
+    -h, --help            帮助信息
 ```
 
-> The actual development of the html entry file must be configured with the following information, otherwise it will lead to errors
+例子:
 
-~~This is our frame file that needs to be introduced first~~
-
-Example:
-
-``` javascript
-    <script>
-        var pageConfig = pageConfig || {};
-        pageConfig.mainSite = '';
-        // 设置域名到当前项目目录 例如 路径中的/fang/, 前面为实际父级路径
-        // http://js.npm.com 是我本地配置的域名 路径指向当前项目文件夹父级目录
-        pageConfig.public = 'http://js.npm.com/fang/';
-        // js版本号
-        pageConfig.img_ver = '20170630';
-    </script>
-    <script type="text/javascript" src="http://static.test.soufunimg.com/common_m/pc_public/fangjs/build/fang2.3.1.js"></script>
+``` bash
+$ fangfis b -o ./test1 -cjiw
+or
+$ fangfis build -o ./test1 -c -j -i -w
 ```
-
-> Js entry file can be called like this
-
-Example:
-
-``` javascript
-    <script>
-        fang(['demo/entry_main']);
-    </script>
-```
-
+**建议使用默认输出目录**
 
 
 ### License

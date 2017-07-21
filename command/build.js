@@ -35,7 +35,7 @@ let paths = {
 };
 module.exports = (ops) => {
     co(function* () {
-        let eventStr = 'css js img';
+        let eventStr = 'css js img alljs';
         // 参数判断
         let hasOps = false;
         // 判断是否监控
@@ -59,6 +59,7 @@ module.exports = (ops) => {
             if (ops.hasOwnProperty(key)) {
                 hasOps = true;
                 watch && (isWatched = true) && gulpbuild.watch(paths, key);
+                if (key === 'js') gulpbuild.fjs(paths);
                 gulpbuild[key](paths);
             }
         });

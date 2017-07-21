@@ -27,6 +27,7 @@ program
     .description('build the project')
     .option('-w, --watch', 'Monitor the current project file changes and build them automatically')
     .option('-j, --js', 'Compressed JavaScript file (don\'t begin with entery_ JavaScript files)')
+    .option('-a, --alljs', 'Compressed all JavaScript single file,The entry file will not be merged')
     .option('-c, --css', 'Compressed css file')
     .option('-i, --img', 'To copy images to the static files (not compressed)')
     // .option('-i, --input [value]', 'Customize the input directory(reference https://www.npmjs.com/package/glob, eg: )')

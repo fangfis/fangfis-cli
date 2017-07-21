@@ -103,6 +103,26 @@ let gulpBuild = {
                 console.log(chalk.green('[已完成] js(Non-entrance files ES6->ES5)'));
             });
     },
+    alljs: function (paths) {
+        console.log(chalk.yellow('[进行中] alljs(all js files ES6->ES5)'));
+        return gulp.src(paths.js)
+            .pipe(changed(`${paths.static}/js/`))
+            .pipe(plumber())
+            .pipe(babel())
+            .pipe(sourcemaps.init())
+            .pipe(uglify({
+                mangle: true,
+                output: {
+                    ascii_only: true
+                }
+            }))
+            .pipe(sourcemaps.write('./maps'))
+            .pipe(replace(/\.js\.map(\?_\w+)?/g, '.js.map?_' + Math.random().toString(32).substring(2)))
+            .pipe(gulp.dest(`${paths.static}/js/`))
+            .on('end', function () {
+                console.log(chalk.green('[已完成] alljs(all js files ES6->ES5)'));
+            });
+    },
     jsNo: function (paths) {
         console.log(chalk.yellow('[进行中] js(jsNo处理)'));
         return gulp.src([paths.nojs, `!${paths.js}`])
