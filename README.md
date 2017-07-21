@@ -18,9 +18,9 @@ $ npm install -g fangfis
 $ fangfis init
 ```
 
-> 输入项目名称,默认为空即在当前文件夹下初始化.
+> 输入项目名称,默认为空即在当前文件夹下初始化 .
 
-![suru](https://ws4.sinaimg.cn/large/006tKfTcly1fhrmfcug6mj307f012mwy.jpg)
+![](https://ws4.sinaimg.cn/large/006tKfTcly1fhrmfcug6mj307f012mwy.jpg)
 
 
 > 该文件夹下不为空提示,可以选择继续,不会删除已有文件
@@ -73,3 +73,5 @@ $ fangfis build -o ./test1 -c -j -i -w
 ### License
 
 [MIT](http://opensource.org/licenses/MIT)
+
+
