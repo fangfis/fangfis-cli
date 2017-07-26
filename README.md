@@ -28,7 +28,7 @@ $ fangfis init
 ![](https://ws1.sinaimg.cn/large/006tKfTcly1fhrmjshtbqj30p10b90t5.jpg)
 
 
-> 构建完成后默认自动安装所需要的依赖模块,如果自动安装失败,请进入该目录,手动安装,推荐使用`cnpm`安装 参考地址: [cnpm](https://npm.taobao.org/)
+> 构建完成后默认自动安装所需要的依赖模块,如果自动安装失败,请进入该目录,手动安装,推荐使用`cnpm`安装 参考地址: [cnpm](https://npm.taobao.org/)
 
 ``` bash
 $ npm install
@@ -41,7 +41,7 @@ $ cnpm install
 
 注:
 
-*dev文件夹目前版本为构建工具预留目录,所有开发项目请在该目录下开发*
+*dev文件夹目前版本为构建工具预留目录,所有开发项目请在该目录下开发*
 
 ### fangfis build
 
