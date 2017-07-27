@@ -26063,7 +26063,9 @@ define('requirePatch', [ 'env!env/file', 'pragma', 'parse', 'lang', 'logger', 'c
                                 });
                             }
                         }).then(function () {
-                            if (contents) {
+                            // The role of the context.config.noDeep is to analyze only the current module,
+                            // analyze the module id and depend on, and no longer analyze the dependency module.
+                            if (contents && !context.config.noDeep) {
                                 eval(contents);
                             }
 
