@@ -130,24 +130,12 @@ function createApplication(name, dir) {
             shell: true,
             cwd: dir
         });
-        var stdoutStr = '';
-        var stderrStr = '';
         install.stdout.on('data', (data) => {
-            stdoutStr += data;
-            var str = stdoutStr.toString();
-            if (/\n/.test(stdoutStr)) {
-                console.log(chalk.green(' ' + str.replace(/\n/g, '')));
-                stdoutStr = '';
-            }
+            console.log(chalk.green(data));
         });
 
         install.stderr.on('data', (data) => {
-            stderrStr += data;
-            var str = stderrStr.toString();
-            if (/\n/.test(stderrStr)) {
-                console.log(chalk.yellow(' ' + str.replace(/\n/g, '')));
-                stderrStr = '';
-            }
+            console.log(chalk.yellow(data));
         });
 
         install.on('close', (code) => {

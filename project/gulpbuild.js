@@ -53,7 +53,7 @@ let filterFileName = (paths, type) => through.obj(function (file, encoding, call
     }
     if (isMeet) {
         fileName = fileName.split('.js')[0];
-        file.name = fileName;
+        file.name = fileName.replace(/\\/g,'/');
         callback(null, file);
     } else {
         callback();
