@@ -99,7 +99,7 @@ let gulpBuild = {
             plumber(),
             filterFileName(paths, 'js'),
             shell([
-                `node ${__dirname}/f.js -o name=<%= file.name %> noDeep=true out=${paths.static}/js/<%= file.name %>.js`
+                `node ${__dirname}/f.js -o name=<%= file.name %> noDeep=true skipModuleInsertion=true out=${paths.static}/js/<%= file.name %>.js`
             ])
         ];
         return pipe(arr)
@@ -116,7 +116,7 @@ let gulpBuild = {
             plumber(),
             filterFileName(paths, 'alljs'),
             shell([
-                `node ${__dirname}/f.js -o name=<%= file.name %> noDeep=true out=${paths.static}/js/<%= file.name %>.js`
+                `node ${__dirname}/f.js -o name=<%= file.name %> noDeep=true skipModuleInsertion=true out=${paths.static}/js/<%= file.name %>.js`
             ])
         ];
         return pipe(arr)
@@ -145,7 +145,7 @@ let gulpBuild = {
             plumber(),
             filterFileName(paths, 'fjs'),
             shell([
-                `node ${__dirname}/f.js -o name=<%= file.name %> out=${paths.static}/js/<%= file.name %>.js`
+                `node ${__dirname}/f.js -o name=<%= file.name %> skipModuleInsertion=true out=${paths.static}/js/<%= file.name %>.js`
             ])
         ];
         return pipe(arr)
