@@ -4,6 +4,7 @@
 const basePath = process.cwd() + '/node_modules/';
 // 引入 gulp
 const gulp = require(basePath + 'gulp');
+const pipe = require(basePath + 'gulp-pipe');
 
 // 引入功能组件
 const uglify = require(basePath + 'gulp-uglify');
@@ -31,19 +32,27 @@ const reg = /^entry_.*\.js$/i;
 /**
  * 过滤文件名
  * @param {*} paths 路径
- * @param {*} negate 是否取反
+ * @param {*} type 类型 js fjs alljs
  */
-let filterFileName = (paths, negate) => through.obj(function (file, encoding, callback) {
+let filterFileName = (paths, type) => through.obj(function (file, encoding, callback) {
     let fileName = file.base && file.path ? file.relative : file.path;
     let nudeFile = fileName.split(/\/|\\/).reverse()[0];
     let isMeet;
-    if (negate) {
-        isMeet = paths.main ? !paths.main.test(nudeFile || fileName) : !reg.test(nudeFile || fileName);
-    }else {
-        isMeet = paths.main ? paths.main.test(nudeFile || fileName) : reg.test(nudeFile || fileName);
+    switch (type) {
+        case 'alljs':
+            isMeet = true;
+            break;
+        case 'js':
+            isMeet = paths.main ? !paths.main.test(nudeFile || fileName) : !reg.test(nudeFile || fileName);
+            break;
+        case 'fjs':
+            isMeet = paths.main ? paths.main.test(nudeFile || fileName) : reg.test(nudeFile || fileName);
+            break;
+        default:
+            break;
     }
     if (isMeet) {
-        fileName = fileName.split('.')[0];
+        fileName = fileName.split('.js')[0];
         file.name = fileName;
         callback(null, file);
     } else {
@@ -53,82 +62,77 @@ let filterFileName = (paths, negate) => through.obj(function (file, encoding, ca
 let gulpBuild = {
     css: function (paths) {
         console.log(chalk.yellow('[进行中] css'));
-        return gulp.src(paths.css)
-            .pipe(changed(`${paths.static}/css/`))
-            .pipe(plumber())
-            .pipe(autoprefixer({
-                browsers: [
-                    'Chrome >= 40',
-                    'Firefox >= 40',
-                    'Explorer >= 8',
-                    'iOS >= 8',
-                    'Android >= 4'
-                ]
-            }))
-            .pipe(csscomb())
-            .pipe(cleancss())
-            .pipe(gulp.dest(`${paths.static}/css/`))
+        let arr = [
+            gulp.src(paths.css), changed(`${paths.static}/css/`),
+            plumber(),
+            autoprefixer({
+                browsers: ['Chrome >= 40', 'Firefox >= 40', 'Explorer >= 8', 'iOS >= 8', 'Android >= 4']
+            }),
+            csscomb(),
+            cleancss(),
+            gulp.dest(`${paths.static}/css/`)
+        ];
+        return pipe(arr)
             .on('end', function () {
                 console.log(chalk.green('[已完成] css'));
             });
     },
     img: function (paths) {
         console.log(chalk.yellow('[进行中] img'));
-        return gulp.src(paths.img)
-            .pipe(changed(`${paths.static}/images/`))
-            .pipe(plumber())
-            .pipe(gulp.dest(`${paths.static}/images/`))
+        let arr = [
+            gulp.src(paths.img),
+            changed(`${paths.static}/images/`),
+            plumber(),
+            gulp.dest(`${paths.static}/images/`)
+        ];
+        return pipe(arr)
             .on('end', function () {
                 console.log(chalk.green('[已完成] img'));
             });
     },
     js: function (paths) {
         console.log(chalk.yellow('[进行中] js(Non-entrance files ES6->ES5)'));
-        return gulp.src(paths.js)
-            .pipe(filterFileName(paths, true))
-            .pipe(changed(`${paths.static}/js/`))
-            .pipe(plumber())
-            .pipe(babel())
-            .pipe(sourcemaps.init())
-            .pipe(uglify({
-                mangle: true,
-                output: {
-                    ascii_only: true
-                }
-            }))
-            .pipe(sourcemaps.write('./maps'))
-            .pipe(replace(/\.js\.map(\?_\w+)?/g, '.js.map?_' + Math.random().toString(32).substring(2)))
-            .pipe(gulp.dest(`${paths.static}/js/`))
+        let that = this;
+        let arr = [
+            gulp.src(paths.js),
+            changed(`${paths.static}/js/`),
+            plumber(),
+            filterFileName(paths, 'js'),
+            shell([
+                `node ${__dirname}/f.js -o name=<%= file.name %> noDeep=true out=${paths.static}/js/<%= file.name %>.js`
+            ])
+        ];
+        return pipe(arr)
             .on('end', function () {
-                console.log(chalk.green('[已完成] js(Non-entrance files ES6->ES5)'));
+                that.uglifyTask(paths, 'js', chalk.green('[已完成] js(Non-entrance files ES6->ES5)'));
             });
     },
     alljs: function (paths) {
         console.log(chalk.yellow('[进行中] alljs(all js files ES6->ES5)'));
-        return gulp.src(paths.js)
-            .pipe(changed(`${paths.static}/js/`))
-            .pipe(plumber())
-            .pipe(babel())
-            .pipe(sourcemaps.init())
-            .pipe(uglify({
-                mangle: true,
-                output: {
-                    ascii_only: true
-                }
-            }))
-            .pipe(sourcemaps.write('./maps'))
-            .pipe(replace(/\.js\.map(\?_\w+)?/g, '.js.map?_' + Math.random().toString(32).substring(2)))
-            .pipe(gulp.dest(`${paths.static}/js/`))
+        let that = this;
+        let arr = [
+            gulp.src(paths.js),
+            changed(`${paths.static}/js/`),
+            plumber(),
+            filterFileName(paths, 'alljs'),
+            shell([
+                `node ${__dirname}/f.js -o name=<%= file.name %> noDeep=true out=${paths.static}/js/<%= file.name %>.js`
+            ])
+        ];
+        return pipe(arr)
             .on('end', function () {
-                console.log(chalk.green('[已完成] alljs(all js files ES6->ES5)'));
+                that.uglifyTask(paths, 'alljs', chalk.green('[已完成] alljs(all js files ES6->ES5)'));
             });
     },
     jsNo: function (paths) {
         console.log(chalk.yellow('[进行中] js(jsNo处理)'));
-        return gulp.src([paths.nojs, `!${paths.js}`])
-            .pipe(changed(`${paths.static}/js/`))
-            .pipe(plumber())
-            .pipe(gulp.dest(`${paths.static}/js/`))
+        let arr = [
+            gulp.src([paths.nojs, `!${paths.js}`]),
+            changed(`${paths.static}/js/`),
+            plumber(),
+            gulp.dest(`${paths.static}/js/`)
+        ];
+        return pipe(arr)
             .on('end', function () {
                 console.log(chalk.green('[已完成] js(jsNo处理)'));
             });
@@ -136,33 +140,52 @@ let gulpBuild = {
     fjs: function (paths) {
         console.log(chalk.yellow('[进行中] fjs(Entry js file)'));
         let that = this;
-        return gulp.src(paths.js)
-            .pipe(filterFileName(paths))
-            // node r.js -o baseUrl=. paths.jquery=some/other/jquery name=main out=main-built.js
-            .pipe(shell([
+        let arr = [
+            gulp.src(paths.js),
+            plumber(),
+            filterFileName(paths, 'fjs'),
+            shell([
                 `node ${__dirname}/f.js -o name=<%= file.name %> out=${paths.static}/js/<%= file.name %>.js`
-            ]))
+            ])
+        ];
+        return pipe(arr)
             .on('end', function () {
                 console.log(chalk.green('[已完成] fjs(Entry js file combo)'));
-                that.uglifyTask(paths);
+                that.uglifyTask(paths, 'fjs', chalk.green('[已完成] fjs(Entry js file combo and ES6->ES5)'));
             });
     },
-    uglifyTask: function (paths) {
-        return gulp.src(`${paths.static}/js/**/*.js`)
-            .pipe(filterFileName(paths))
-            .pipe(babel())
-            .pipe(sourcemaps.init())
-            .pipe(uglify({
+
+    /**
+     * js二阶处理(babel,sourecemap,uglify等)
+     * @param {object} paths 路径对象
+     * @param {string} type js fjs alljs
+     * @param {string} type console信息
+     * @returns
+     */
+    uglifyTask: function (paths, type, log) {
+        //# sourceMappingURL=../../maps/plugins/fangLazyLoader/fangLazyLoader.js.map?_ufaomt6ehl8
+        let arr = [
+            gulp.src(`${paths.static}/js/**/*.js`),
+            filterFileName(paths, type),
+            plumber(),
+            babel(),
+            replace(/\/\/#\s*sourceMappingURL=.+\.map\?\w+/g, ''),
+            sourcemaps.init({
+                loadMaps: true
+            }),
+            uglify({
                 mangle: true,
                 output: {
                     ascii_only: true
                 }
-            }))
-            .pipe(sourcemaps.write('./maps'))
-            .pipe(replace(/\.js\.map(\?_\w+)?/g, '.js.map?_' + Math.random().toString(32).substring(2)))
-            .pipe(gulp.dest(`${paths.static}/js/`))
+            }),
+            sourcemaps.write('./maps'),
+            replace(/\.js\.map(\?_\w+)?/g, '.js.map?_' + Math.random().toString(32).substring(2)),
+            gulp.dest(`${paths.static}/js/`)
+        ];
+        return pipe(arr)
             .on('end', function () {
-                console.log(chalk.green('[已完成] fjs(Entry js file combo and ES6->ES5)'));
+                console.log(log);
             });
     },
     watch: function (paths, key) {
