@@ -1,14 +1,14 @@
-# fangfis
+# fangfis-cli
 fang.com 前端构建工具
 
 > 前端构建工具使用pc+wap.
 
-前提条件: [Node.js](https://nodejs.org/en/) (>=4.x, 6.x), npm 版本 3+ and [Git](https://git-scm.com/) .
+前提条件: [Node.js](https://nodejs.org/en/) (>=4.x, 6.x), npm 版本 3+ .
 
 ### Installation
 
 ``` bash
-$ npm install -g fangfis
+$ npm install -g fangfis-cli
 
 ```
 
