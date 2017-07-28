@@ -1,77 +1,47 @@
-# fangfis
-fang.com 前端构建工具
+> 一切皆模块，代码更清晰。
 
-> 前端构建工具使用pc+wap.
+## 简介
+FangFIS 是房天下前端（包括js, css, images）集成解决方案，主要解决前端工程化 、资源加载（压缩、合并、异步、按需、依赖管理）、模块化开发、自动化等问题，由两部分组成。
 
-前提条件: [Node.js](https://nodejs.org/en/) (>=4.x, 6.x), npm 版本 3+ and [Git](https://git-scm.com/) .
+1. Fang.js，一个基于CMD模块化思想、适用于 Web 浏览器端的模块加载器。使用 Fang.js，可以更好地组织 JavaScript 代码。它可以轻松集成 jQuery（可选），在使用过程中，无需再额外加载。Fang.js 支持JS资源文件的动态合并加载、异步加载、按需加载和依赖管理。使用 Fang.js，可以更好地组织 JavaScript 代码。
 
-### Installation
+2. FangFIS-CLI，一个基于 Gulp 的自动化构建工具。通过一些简单的命令行操作，支持 CSS 的压缩、JS 的 ES6 转 ES5、合并、压缩、混淆等功能，并且会自动添加模块ID，模块依赖。通过 FangFIS 结合 Fang.js，我们可以方便快速地处理前端静态资源文件，减少了多余的工作，提高开发效率和代码性能。
 
-``` bash
-$ npm install -g fangfis
+## 特性
+
+FangFIS 追求简单、自然的代码书写和组织方式，无论是中小型站点，还是大型复杂应用，使用 FangFIS，都可以让我们的工作变得更轻松愉悦。FangFIS 具有以下核心特性：
+- **简单友好的模块定义规范：**Fang.js 遵循 CMD 规范，可以像 Node.js 一般书写模块代码。
+- **自然直观的代码组织方式：**简洁清晰的配置，依赖的自动加载或合并加载、可以让我们更多地享受编码的乐趣。
+- **依赖的自动管理：**只要按照指定的方式声明并引入依赖模块，Fang.js 就会自动按照 JS 代码的执行顺序引入并加载对应的模块代码。
+- **脚本的异步加载：**考虑到代码加载量和运行性能，Fang.js 还支持模块的异步加载。
+- **友好的调试：**Fang.js 支持开发者根据开发需求自定义自动加载开发环境或者生产环境的代码，方便调试。
+- **自动化工作流：**通过自动化构建工具，可以方便快速地完成代码的压缩与合并，一方面减少工作量，另一方面提升页面加载性能。
+
+FangFIS 带来的最大好处是：提升代码的可维护性。上面的每一项特性，在使用文档中都会有详细阐述。如果一个站点的 JS 文件超过 3 个，就适合用 FangFIS 来组织和维护代码。涉及的 JS 文件越多，FangFIS 就越适合。
+
+## 兼容性
 
 ```
+Desktop
 
-### Usage
+- Internet Explorer: 9+               ✔
+- Edge: 12+                           ✔
+- Chrome: 40+                         ✔
+- Safari: 9+                          ✔
+- Firefox: 40+                        ✔
+- Opera: 30+                          ✔
 
-``` bash
-$ fangfis init
+
+Mobile
+
+- Stock browser on Android 4.0+       ✔
+- Safari on iOS 7+                    ✔
 ```
 
-> 输入项目名称,默认为空即在当前文件夹下初始化.
+FangFIS 构建的代码也可以运行在 Mobile 端，包括 Hybrid 模式的 App 上。
 
-![](https://ws4.sinaimg.cn/large/006tKfTcly1fhrmfcug6mj307f012mwy.jpg)
+兼容性覆盖大部分主流浏览器近几年的主流版本，保首起见，均从近期版本写起。理论上所有支持 ECMAScript 5 的浏览器都能够兼容。
 
+## 示例
 
-> 该文件夹下不为空提示,可以选择继续,不会删除已有文件
-
-![](https://ws1.sinaimg.cn/large/006tKfTcly1fhrmjshtbqj30p10b90t5.jpg)
-
-
-> 构建完成后默认自动安装所需要的依赖模块,如果自动安装失败,请进入该目录,手动安装,推荐使用`cnpm`安装 参考地址: [cnpm](https://npm.taobao.org/)
-
-``` bash
-$ npm install
-or
-$ cnpm install
-```
-> 初始化完成后的结构
-
-![](https://ws2.sinaimg.cn/large/006tKfTcly1fhrmsh929ij308q05c0sm.jpg)
-
-注:
-
-*dev文件夹目前版本为构建工具预留目录,所有开发项目请在该目录下开发*
-
-### fangfis build
-
-使用fangfis进行构建.
-
-构建选项如下:
-
-``` bash
-    -w, --watch           监听文件变化并自动构建
-    -j, --js              压缩js文件到目标文件夹,入口文件`自动合并`所有依赖到目标文件夹,默认: static/js
-    -a, --alljs           压缩所有js文件到目标目录,输入目录为`dev/js`,不可自定义,入口文件作为单文件压缩,`不合并`所有依赖, 输出目录可自定义,默认: static/js
-    -c, --css             压缩所有css文件到目标目录,输入目录为`dev/css`,不可自定义,输出目录可自定义,默认: static/css
-    -i, --img             拷贝所有img文件到目标目录,输入目录为`dev/images`,不可自定义,输出目录可自定义,默认: static/imgages
-    -o, --output [value]  自定义输入目录,可自定义到一级,默认: ./static
-    -m, --main [value]    自定义入口文件,只能传入正则表达式,默认: /^entry_.*\.js$/i
-    -h, --help            帮助信息
-```
-
-例子:
-
-``` bash
-$ fangfis b -o ./test1 -cjiw
-or
-$ fangfis build -o ./test1 -c -j -i -w
-```
-**建议使用默认输出目录**
-
-
-### License
-
-[MIT](http://opensource.org/licenses/MIT)
-
-
+可以查看 [示例](quickstart.md) 来了解。

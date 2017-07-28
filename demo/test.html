@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <link href="//brofen.cn/images/icon.png" rel="shortcut icon">
+    <title>FangJS startup demo</title>
+    <style type="text/css">
+        .pageTitle {
+            text-align: center;
+        }
+        .video {
+            width: 500px;
+            margin: 0 auto;
+        }
+        .center {
+            text-align: center;
+        }
+        .button {
+            border: 0;
+            background-color: #08c;
+            color: #fff;
+            margin-bottom: 20px;
+            outline: 0;
+        }
+        .copyright {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            margin: 0;
+            text-align: right;
+            color: #aaa;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="center">
+        <button class="button" id="loadV">点我加载播放插件</button>
+    </div>
+    <div id="v" class="video"></div>
+<!--     <script>
+    var pageConfig = {};
+    // 资源文件路径前缀
+    pageConfig.public = 'http://doc.brofen.cn/fangjs/demo/';
+    // js版本号，通过修改版本号，可以快速更新线上js文件，防止js缓存。
+    pageConfig.img_ver = '20170630';
+    </script> -->
+    <!-- 引入fangjs -->
+    <!-- <script src="http://static.test.soufunimg.com/common_m/pc_public/fangjs/build/fang2.3.1.js"></script> -->
+    <script src="http://static.test.soufunimg.com/common_m/pc_public/fangjs/build/??fang2.3.2.js,jquery/jquery-3.js"></script>
+    <script>
+    fang.config({
+        base: 'http://doc.brofen.cn/fangjs/demo/static/js/',
+        ver: '2017072001'
+    });
+    </script>
+    <script>
+
+    // 调用入口模块
+    fang('entry/entry_http', function (a) {
+        console.log(a);
+    });
+    </script>
+</body>
+
+</html>
+
+<!--
+    // fang.config({
+    //     // map: [
+    //     // function (uri) {
+    //     //     if (uri.indexOf('?') === -1) {
+    //     //         uri += '?_' + 55555;
+    //     //     }
+    //     //     return uri;
+    //     // }
+    //     // ],
+    //     debug: true,
+    //     preload: ['modules/load'],
+    //     charset: 'utf-8'
+    // });
+ -->

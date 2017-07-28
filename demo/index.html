@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <title>FangJS startup demo</title>
+    <link rel="stylesheet" type="text/css" href="static/css/style.css">
+</head>
+
+<body>
+    <div class="center">
+        <button class="button" id="loadV">点我加载播放插件</button>
+    </div>
+    <div id="v" class="video"></div>
+    <script>
+    var pageConfig = {};
+    // 资源文件路径前缀
+    pageConfig.public = '//doc.brofen.cn/fangjs/demo/';
+    // js版本号，通过修改版本号，可以快速更新线上js文件，防止js缓存。
+    pageConfig.img_ver = '2017063001';
+    </script>
+    <!-- 引入fangjs -->
+    <script src="//static.test.soufunimg.com/common_m/pc_public/fangjs/build/fang2.3.1.js"></script>
+    <script>
+    // 调用入口模块
+    fang(['entry/entry_demo']);
+    </script>
+</body>
+
+</html>

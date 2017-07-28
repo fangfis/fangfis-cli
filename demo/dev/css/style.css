@@ -1,0 +1,26 @@
+.pageTitle {
+    text-align: center;
+}
+.video {
+    width: 500px;
+    margin: 0 auto;
+}
+.center {
+    text-align: center;
+}
+.button {
+    border: 0;
+    background-color: #08c;
+    color: #fff;
+    margin-bottom: 20px;
+    outline: 0;
+}
+.copyright {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    margin: 0;
+    text-align: right;
+    color: #aaa;
+}

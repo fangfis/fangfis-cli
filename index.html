@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Fang.js使用文档</title>
+    <link href="//brofen.cn/images/icon.png" rel="shortcut icon">
+    <meta name="description" content="Fang.js，房天下模块化">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="//cdn.bootcss.com/docsify/4.2.0/themes/vue.css">
+    <style type="text/css" media="screen">
+        .sidebar ul li .active > a {
+            color: #42b983;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app"></div>
+</body>
+<script>
+window.$docsify = {
+    name: 'FangFIS',
+    loadNavbar: true,
+    loadSidebar: true,
+    auto2top: true,
+    subMaxLevel: 2,
+    search: {
+        noData: {
+            '/': '没结果!'
+        },
+        paths: 'auto',
+        placeholder: {
+            '/': '搜索'
+        }
+    }
+};
+</script>
+<script src="//cdn.bootcss.com/docsify/4.2.0/docsify.min.js"></script>
+<script src="//cdn.bootcss.com/docsify/4.2.0/plugins/search.min.js"></script>
+
+</html>
