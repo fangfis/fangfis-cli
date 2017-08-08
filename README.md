@@ -1,55 +1,53 @@
-# fangfis-cli
-fang.com 前端构建工具
+> fangfis-cli 是一套与 fang.js 完善结合的自动化代码构建工具。
 
-> 前端构建工具使用pc+wap.
+fangfis-cli 是一个基于 Node 的前端构建工具，根据房天下前端开发需求进行了相应的定制，支持 CSS 的压缩、JS 的 ES6 转 ES5、合并、压缩、混淆等功能，通过 FangFIS 结合 fang.js，我们可以方便快速地处理前端静态资源文件，减少了多余的工作，提高开发效率和代码性能。
 
-前提条件: [Node.js](https://nodejs.org/en/) (>=4.x, 6.x), npm 版本 3+ .
+> 需要注意，本地开发的代码，必须先通过 fangfis-cli 进行构建才能发布到正式环境。
 
-### Installation
+## 安装
 
-``` bash
+fangfis-cli 基于 Node.js，因此在开始安装之前，确保你的系统安装了 Node.js 环境。(Nodejs >= 4.x, npm > 3.x)
+
+```bash
 $ npm install -g fangfis-cli
-
 ```
 
-### Usage
+## 使用
 
-``` bash
+输入项目名称，默认为空即在当前文件夹下初始化。
+```bash
 $ fangfis init
 ```
 
-> 输入项目名称,默认为空即在当前文件夹下初始化.
+![](https://ws3.sinaimg.cn/large/006tNc79ly1fhv65yfla1j307f012dfm.jpg)
 
-![](https://ws4.sinaimg.cn/large/006tKfTcly1fhrmfcug6mj307f012mwy.jpg)
+该文件夹下不为空提示，可以选择继续，不会删除已有文件。
 
+![](https://ws1.sinaimg.cn/large/006tNc79ly1fhv6610msqj30p10b9t92.jpg)
 
-> 该文件夹下不为空提示,可以选择继续,不会删除已有文件
+构建完成后默认自动安装所需要的依赖模块，如果自动安装失败，请进入该目录，手动安装，推荐使用cnpm安装 参考地址: [cnpm](https://npm.taobao.org/)
 
-![](https://ws1.sinaimg.cn/large/006tKfTcly1fhrmjshtbqj30p10b90t5.jpg)
-
-
-> 构建完成后默认自动安装所需要的依赖模块,如果自动安装失败,请进入该目录,手动安装,推荐使用`cnpm`安装 参考地址: [cnpm](https://npm.taobao.org/)
-
-``` bash
+```bash
 $ npm install
 or
 $ cnpm install
 ```
-> 初始化完成后的结构
 
-![](https://ws2.sinaimg.cn/large/006tKfTcly1fhrmsh929ij308q05c0sm.jpg)
+初始化完成后的结构
+
+![](https://ws2.sinaimg.cn/large/006tNc79ly1fhv663wedfj308q05cmx1.jpg)
 
 注:
 
-*dev文件夹目前版本为构建工具预留目录,所有开发项目请在该目录下开发*
+dev文件夹目前版本为构建工具预留目录，所有开发项目必须在该目录下开发，下面的css、js和images文件夹的名字不能改。
 
 ### fangfis build
 
-使用fangfis进行构建.
+使用fangfis进行构建。
 
-构建选项如下:
+构建选项如下：
 
-``` bash
+```bash
     -w, --watch           监听文件变化并自动构建
     -j, --js              压缩js文件到目标文件夹,入口文件`自动合并`所有依赖到目标文件夹,默认: static/js
     -a, --alljs           压缩所有js文件到目标目录,输入目录为`dev/js`,不可自定义,入口文件作为单文件压缩,`不合并`所有依赖, 输出目录可自定义,默认: static/js
@@ -60,18 +58,12 @@ $ cnpm install
     -h, --help            帮助信息
 ```
 
-例子:
+例子：
 
-``` bash
+```bash
 $ fangfis b -o ./test1 -cjiw
 or
 $ fangfis build -o ./test1 -c -j -i -w
 ```
+
 **建议使用默认输出目录**
-
-
-### License
-
-[MIT](http://opensource.org/licenses/MIT)
-
-
