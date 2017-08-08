@@ -30,6 +30,7 @@ let paths = {
     dev: './dev',
     css: './dev/css/**/*.css',
     js: './dev/js/**/*.js',
+    alljs: './dev/js/**/*.js',
     nojs: '/dev/js/**/*',
     img: './dev/images/**/*'
 };

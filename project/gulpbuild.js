@@ -200,6 +200,9 @@ let gulpBuild = {
                 gulp.watch(paths[name], function (event) {
                     console.log(chalk.green('File ' + event.path + ' was ' + event.type + ', running tasks => ' + name));
                     that[name](paths);
+                    if (name === 'js') {
+                        that.fjs(paths);
+                    }
                 });
             });
         }
