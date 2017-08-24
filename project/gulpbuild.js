@@ -27,146 +27,147 @@ const plumber = require(basePath + 'gulp-plumber');
 const chalk = require(basePath + 'chalk');
 // CSS规范排序
 const csscomb = require(basePath + 'gulp-csscomb');
-const reg = /^entry_.*\.js$/i;
+// gulp的ftp插件
+const ftp = require(basePath + 'vinyl-ftp');
+const fs = require('fs');
+const path = require('path');
+
+const flatten = require(basePath + 'gulp-flatten');
+
+// gulp combo插件
+const fangfisCombo = require('/Users/tankunpeng/WebSite/gulp-fangfis-combo');
+
+// 生成文件流
+const Vinyl = require('vinyl');
+const stream = require('stream');
+let writeAsyncFile = function(fileData, base,dest) {
+    // 接受回传异步模块数组
+    fileData.forEach(function(item) {
+        var readable = stream.Readable({
+            objectMode: true
+        });
+        readable._read = function() {
+            this.push(new Vinyl({
+                path: item.path,
+                base: base,
+                contents: new Buffer(item.contents)
+            }));
+            this.push(null);
+        };
+        readable.pipe(gulp.dest(dest));
+    });
+};
 
 /**
  * 过滤文件名
- * @param {*} paths 路径
- * @param {*} type 类型 js fjs alljs
+ * @param {*} config config
  */
-let filterFileName = (paths, type) => through.obj(function (file, encoding, callback) {
+let filterFileName = (config) => through.obj(function(file, encoding, callback) {
+    let fileName = path.relative(path.resolve(config.base), file.path).replace('.js', '');
+    file.name = fileName.replace(/\\/g, '/');
+    console.log(chalk.cyan(`${file.name}:`));
+    callback(null, file);
+});
+
+/**
+ * 读取进度
+ */
+let filterFtpFileName = () => through.obj(function(file, encoding, callback) {
     let fileName = file.base && file.path ? file.relative : file.path;
-    let nudeFile = fileName.split(/\/|\\/).reverse()[0];
-    let isMeet;
-    switch (type) {
-        case 'alljs':
-            isMeet = true;
-            break;
-        case 'js':
-            isMeet = paths.main ? !paths.main.test(nudeFile || fileName) : !reg.test(nudeFile || fileName);
-            break;
-        case 'fjs':
-            isMeet = paths.main ? paths.main.test(nudeFile || fileName) : reg.test(nudeFile || fileName);
-            break;
-        default:
-            break;
-    }
-    if (isMeet) {
-        fileName = fileName.split('.js')[0];
-        file.name = fileName.replace(/\\/g,'/');
+    if (/.*\.\w+$/.test(fileName)) {
+        console.log(chalk.cyan(`      ${fileName}`));
         callback(null, file);
     } else {
         callback();
     }
 });
+
 let gulpBuild = {
-    css: function (paths) {
+    css: function(config) {
         console.log(chalk.yellow('[进行中] css'));
         let arr = [
-            gulp.src(paths.css), changed(`${paths.static}/css/`),
+            gulp.src(`${config.input}/css/**/*.css`, {
+                base: `${config.input}/css`
+            }),
+            changed(`${config.output}/css/`),
             plumber(),
             autoprefixer({
                 browsers: ['Chrome >= 40', 'Firefox >= 40', 'Explorer >= 8', 'iOS >= 8', 'Android >= 4']
             }),
             csscomb(),
             cleancss(),
-            gulp.dest(`${paths.static}/css/`)
+            gulp.dest(`${config.output}/css/`)
         ];
         return pipe(arr)
-            .on('end', function () {
+            .on('end', function() {
                 console.log(chalk.green('[已完成] css'));
             });
     },
-    img: function (paths) {
+    img: function(config) {
         console.log(chalk.yellow('[进行中] img'));
         let arr = [
-            gulp.src(paths.img),
-            changed(`${paths.static}/images/`),
+            gulp.src(`${config.input}/images/**/*`, {
+                base: `${config.input}/images`
+            }),
+            changed(`${config.output}/images/`),
             plumber(),
-            gulp.dest(`${paths.static}/images/`)
+            gulp.dest(`${config.output}/images/`)
         ];
         return pipe(arr)
-            .on('end', function () {
+            .on('end', function() {
                 console.log(chalk.green('[已完成] img'));
             });
     },
-    js: function (paths) {
-        console.log(chalk.yellow('[进行中] js(Non-entrance files ES6->ES5)'));
-        let that = this;
-        let arr = [
-            gulp.src(paths.js),
-            changed(`${paths.static}/js/`),
-            plumber(),
-            filterFileName(paths, 'js'),
-            shell([
-                `node ${__dirname}/f.js -o name=<%= file.name %> noDeep=true skipModuleInsertion=true out=${paths.static}/js/<%= file.name %>.js`
-            ])
-        ];
-        return pipe(arr)
-            .on('end', function () {
-                that.uglifyTask(paths, 'js', chalk.green('[已完成] js(Non-entrance files ES6->ES5)'));
-            });
-    },
-    alljs: function (paths) {
-        console.log(chalk.yellow('[进行中] alljs(all js files ES6->ES5)'));
-        let that = this;
-        let arr = [
-            gulp.src(paths.js),
-            changed(`${paths.static}/js/`),
-            plumber(),
-            filterFileName(paths, 'alljs'),
-            shell([
-                `node ${__dirname}/f.js -o name=<%= file.name %> noDeep=true skipModuleInsertion=true out=${paths.static}/js/<%= file.name %>.js`
-            ])
-        ];
-        return pipe(arr)
-            .on('end', function () {
-                that.uglifyTask(paths, 'alljs', chalk.green('[已完成] alljs(all js files ES6->ES5)'));
-            });
-    },
-    jsNo: function (paths) {
+    jsNo: function(config) {
         console.log(chalk.yellow('[进行中] js(jsNo处理)'));
         let arr = [
-            gulp.src([paths.nojs, `!${paths.js}`]),
-            changed(`${paths.static}/js/`),
+            gulp.src([`${config.input}/js/**/*`, '!**/*.js'], {
+                base: `${config.input}/js`
+            }),
+            changed(`${config.output}/js/`),
             plumber(),
-            gulp.dest(`${paths.static}/js/`)
+            gulp.dest(`${config.output}/js/`)
         ];
         return pipe(arr)
-            .on('end', function () {
+            .on('end', function() {
                 console.log(chalk.green('[已完成] js(jsNo处理)'));
             });
     },
-    fjs: function (paths) {
-        console.log(chalk.yellow('[进行中] fjs(Entry js file)'));
-        let that = this;
+    js: function(config) {
+        console.log(chalk.yellow('[进行中] js(Entry js file)'));
+        console.log(Object.assign({
+            base: `${config.input}/js`
+        },config.combo));
         let arr = [
-            gulp.src(paths.js),
+            gulp.src(config.main,{base: `${config.input}/js`}),
             plumber(),
-            filterFileName(paths, 'fjs'),
-            shell([
-                `node ${__dirname}/f.js -o name=<%= file.name %> skipModuleInsertion=true out=${paths.static}/js/<%= file.name %>.js`
-            ])
+            filterFileName(config),
+            fangfisCombo(Object.assign({
+                base: `${config.input}/js`
+            },config.combo), function(cons) {
+                // cons Array 数组类型 回传异步模块合并后的异步模块数组
+                writeAsyncFile(cons, `${config.input}/js`,`${config.output}/js`);
+            }),
+            gulp.dest(`${config.output}/js`)
         ];
         return pipe(arr)
-            .on('end', function () {
-                console.log(chalk.green('[已完成] fjs(Entry js file combo)'));
-                that.uglifyTask(paths, 'fjs', chalk.green('[已完成] fjs(Entry js file combo and ES6->ES5)'));
+            .on('end', function() {
+                console.log(chalk.green('[已完成] js(Entry js file)'));
             });
     },
 
     /**
      * js二阶处理(babel,sourecemap,uglify等)
-     * @param {object} paths 路径对象
-     * @param {string} type js fjs alljs
-     * @param {string} type console信息
+     * @param {object} config 路径对象
+     * @param {string} src src 信息
+     * @param {string} log console信息
      * @returns
      */
-    uglifyTask: function (paths, type, log) {
-        //# sourceMappingURL=../../maps/plugins/fangLazyLoader/fangLazyLoader.js.map?_ufaomt6ehl8
+    uglifyTask: function(config, src, log) {
+        // # sourceMappingURL=../../maps/plugins/fangLazyLoader/fangLazyLoader.js.map?_ufaomt6ehl8
         let arr = [
-            gulp.src(`${paths.static}/js/**/*.js`),
-            filterFileName(paths, type),
+            gulp.src(src),
+            filterFileName(config),
             plumber(),
             babel(),
             replace(/\/\/#\s*sourceMappingURL=.+\.map\?\w+/g, ''),
@@ -181,39 +182,69 @@ let gulpBuild = {
             }),
             sourcemaps.write('./maps'),
             replace(/\.js\.map(\?_\w+)?/g, '.js.map?_' + Math.random().toString(32).substring(2)),
-            gulp.dest(`${paths.static}/js/`)
+            gulp.dest(`${config.output}/js`)
         ];
         return pipe(arr)
-            .on('end', function () {
+            .on('end', function() {
                 console.log(log);
             });
     },
-    watch: function (paths, key) {
-        var that = this;
+
+    watch: function(config, key) {
+        let that = this;
         if (key) {
-            gulp.watch(paths[key], function (event) {
+            gulp.watch(config[key], function(event) {
                 console.log(chalk.green('File ' + event.path + ' was ' + event.type + ', running tasks => ' + key));
-                that[key](paths);
+                that[key](config);
             });
         } else {
-            'css js img'.replace(/\w+/g, function (name) {
-                gulp.watch(paths[name], function (event) {
+            'css js img'.replace(/\w+/g, function(name) {
+                gulp.watch(config[name], function(event) {
                     console.log(chalk.green('File ' + event.path + ' was ' + event.type + ', running tasks => ' + name));
-                    that[name](paths);
+                    that[name](config);
                     if (name === 'js') {
-                        that.fjs(paths);
+                        that.fjs(config);
                     }
                 });
             });
         }
     },
-    default: function (paths) {
+    ftp: function(ftpConfig) {
+        console.log(chalk.yellow('[进行中] ftp uploading'));
+        let conn = ftp.create(ftpConfig);
+
+        let ftpFn = (pt) => {
+            let arr = [
+                gulp.src(pt),
+                plumber(),
+                filterFtpFileName(),
+                conn.newer(ftpConfig.output),
+                conn.dest(ftpConfig.output)
+            ];
+            return pipe(arr)
+                .on('end', function() {
+                    console.log(chalk.green('[已完成] ftp uploading'));
+                });
+        };
+        console.log(chalk.cyan('uploading files:'));
+        fs.readdir(ftpConfig.input, function(err) {
+            if (err) {
+                if (err.code === 'ENOENT') {
+                    console.log(chalk.green('[已取消] ftp err message:no such file or directory'));
+                } else {
+                    ftpFn(ftpConfig.input);
+                }
+            } else {
+                ftpFn(`${ftpConfig.input}/**/*`);
+            }
+        });
+    },
+    default: function(config) {
         let that = this;
-        that.css(paths);
-        that.img(paths);
-        that.js(paths);
-        that.jsNo(paths);
-        that.fjs(paths);
+        that.css(config);
+        that.img(config);
+        that.js(config);
+        that.jsNo(config);
     }
 };
 

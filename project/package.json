@@ -42,6 +42,7 @@
     "babel-plugin-transform-es2015-modules-commonjs-simple": "^6.7.4",
     "babel-plugin-transform-es3-member-expression-literals": "^6.22.0",
     "babel-plugin-transform-es3-property-literals": "^6.22.0",
-    "gulp-pipe": "^1.0.4"
+    "gulp-pipe": "^1.0.4",
+    "vinyl-ftp": "^0.6.0"
   }
 }

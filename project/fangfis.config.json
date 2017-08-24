@@ -1,0 +1,47 @@
+{
+    "build": {
+        "input": "./dev",
+        "output": "./static",
+        "base": "./dev/js",
+        "main": "entry_*",
+        "combo": {
+            "ignore": [
+                "jquery"
+            ],
+            "async": ["main.js"],
+            "config": {
+                "alias": {
+                    "jquery": "jquery",
+                    "util": "plugins/util"
+                },
+                "paths": {
+                    "webim": "//js.soufunimg.com/upload/webim"
+                }
+            }
+        }
+    },
+    "upload": {
+        "default": {
+            "host": "localhost",
+            "user": "anonymous",
+            "pass": "anonymous@",
+            "input": "./dev",
+            "output": "./static",
+            "parallel": 5,
+            "port": 21,
+            "idleTimeout": 100,
+            "maxConnections": 5
+        },
+        "online": {
+            "host": "localhost",
+            "user": "anonymous",
+            "pass": "anonymous@",
+            "input": "./dev",
+            "output": "./static",
+            "parallel": 5,
+            "port": 21,
+            "idleTimeout": 100,
+            "maxConnections": 5
+        }
+    }
+}
