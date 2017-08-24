@@ -9,7 +9,7 @@ const version = pkg.version;
 program
     .version(version, '    --version')
     .usage('[options] [dir]');
-    // .option('-i, --init', 'Generate a new project')
+// .option('-i, --init', 'Generate a new project')
 
 program
     .usage('<command>');
@@ -18,8 +18,9 @@ program
     .command('init')
     .description('Generate a new project')
     .alias('i')
-    .action(() => {
-        require('../command/init')();
+    .option('-y, --yes', 'All interactive options are automatically executed by default')
+    .action((options) => {
+        require('../command/init')(options);
     });
 
 program
@@ -27,34 +28,54 @@ program
     .description('build the project')
     .option('-w, --watch', 'Monitor the current project file changes and build them automatically')
     .option('-j, --js', 'Compressed JavaScript file (don\'t begin with entery_ JavaScript files)')
-    .option('-a, --alljs', 'Compressed all JavaScript single file,The entry file will not be merged')
     .option('-c, --css', 'Compressed css file')
     .option('-i, --img', 'To copy images to the static files (not compressed)')
-    // .option('-i, --input [value]', 'Customize the input directory(reference https://www.npmjs.com/package/glob, eg: )')
     .option('-o, --output [value]', 'Customize the output directory(eg: ./static)')
     .option('-m, --main [value]', 'Customize the import module rules(Only support regular eg: /^entry_*/ig)')
     .alias('b')
     .action((options) => {
+        options.valueParams = ['input','output','main'];
+        options.booleanParams = ['watch','fjs','js','css','img'];
         require('../command/build')(options);
-    }).on('--help', function () {
+    }).on('--help', function() {
         console.log(chalk.green('  Examples: '));
         console.log(chalk.green('           fangfis build -o static -w -c'));
     });
 
+program
+    .command('upload')
+    .description('upload the project')
+    .option('-H, --host [value]', 'FTP host, default is localhost')
+    .option('-u, --user [value]', 'FTP user, default is anonymous')
+    .option('-p, --pass [value]', 'FTP password, default is anonymous@')
+    .option('-o, --output [value]', 'FTP target path, default is ./static')
+    .option('-i, --input [value]', 'FTP input path, default is ./static')
+    .option('-t, --type [value]', 'Connection type, convenient and configure multiple FTP site. Default is default')
+    .option('-P, --port [value]', 'FTP port, default is 21')
+    .option('-T, --idleTimeout [value]', 'Time to keep idle FTP connections (milliseconds), default is 100')
+    .option('-m, --maxConnections [value]', 'Maximum number of connections, should be greater or equal to "parallel". Default is 5')
+    .alias('u')
+    .action((options) => {
+        options.params = ['host','user','pass','output','input','port','log','debug','idleTimeout','maxConnections'];
+        options.mustParams = ['host','user','pass','output','input'];
+        require('../command/upload')(options);
+    }).on('--help', function() {
+        console.log(chalk.green('  Examples: '));
+        console.log(chalk.green('           fangfis upload -h localhost -u anonymous -p anonymous@'));
+    });
 
-program.on('--help', function () {
+program.on('--help', function() {
     console.log('');
     console.log('  Examples:');
-    console.log('    fangfis init  -h   Get the init command help');
-    console.log('    fangfis bulid -h   Get the bulid command help');
+    console.log('    fangfis init|i  -h   Get the init command help');
+    console.log('    fangfis bulid|b -h   Get the bulid command help');
+    console.log('    fangfis upload|u -h   Get the upload command help');
     console.log('');
     console.log(chalk.yellow('  Please contact me if you have any questions. '));
     console.log(chalk.yellow('  mail: yueyanlei@fang.com,tankunpeng@fang.com '));
     console.log(chalk.yellow('  issues: https://github.com/fangjs/fangfis/issues '));
 });
 program.parse(process.argv);
-
 if (!program.args.length) {
     program.help();
 }
-
