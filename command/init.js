@@ -131,7 +131,7 @@ function createApplication(name, dir, inputFolder, outputFolder) {
         if (--wait) return;
         let prompt = launchedFromCmd() ? '>' : '$';
         console.log(chalk.gray(' prompt:'), chalk.green('  if installed automatically fails, you can also perform the following commands installed manually \n  ' + prompt + ' cd ' + dir + ' && npm install'));
-        spinner.start('Install npm packages...');
+        spinner = ora('Install npm packages...').start();
         const install = spawn('npm', ['install', '--registry=https://registry.npm.taobao.org'], {
             shell: true,
             cwd: dir
