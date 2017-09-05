@@ -133,7 +133,6 @@ module.exports = (ops) => {
             buildConfig[item] = ops[item];
         }
     });
-    console.log(buildConfig);
     // 格式化入口
     let mainJson = formatMain(buildConfig);
     buildConfig.main = mainJson.main;

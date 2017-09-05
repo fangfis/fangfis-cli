@@ -32,8 +32,7 @@ const fs = require('fs');
 const path = require('path');
 
 // gulp combo插件
-const fangfisCombo = require('/Users/tankunpeng/WebSite/gulp-fangfis-combo');
-
+const fangfisCombo = require(basePath + 'gulp-fangfis-combo');
 // 生成文件流
 const Vinyl = require('vinyl');
 const stream = require('stream');
