@@ -71,7 +71,7 @@ let writeAsyncFile = function (fileData, base, dest) {
         ];
         return pipe(arr)
         .on('end', function () {
-            console.log(chalk.green('[已完成] ' + item.origId));
+            console.log(chalk.green('[已完成] 异步模块 ' + item.origId));
         });
         // readable.pipe(gulp.dest(dest));
     });
