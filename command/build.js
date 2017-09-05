@@ -23,7 +23,7 @@ function exit(code) {
     }
     exit.exited = true;
 
-    streams.forEach(function(stream) {
+    streams.forEach(function (stream) {
         // submit empty write request and wait for completion
         draining += 1;
         stream.write('', done);
@@ -52,6 +52,9 @@ function formatMain(config) {
     let main = config.main,
         input = config.input,
         base = config.base;
+    let combo = config.combo;
+    let addMod;
+    if (combo && typeof combo === 'object') addMod = combo.addMod;
     let mainArr;
     let noMainArr = [];
     let outputMainArr = [];
@@ -64,7 +67,7 @@ function formatMain(config) {
         exit();
         return {};
     }
-    let format = function(pathstr) {
+    let format = function (pathstr) {
         let result;
         if (!pathstr || typeof pathstr !== 'string') {
             result = '';
@@ -80,6 +83,10 @@ function formatMain(config) {
     };
     if (main && typeof main === 'string') {
         mainArr = main.split(',');
+        // 合并入口文件
+        if (addMod && addMod.length) {
+            mainArr = mainArr.concat(addMod);
+        }
         let i = 0,
             len = mainArr.length;
         for (; i < len; i++) {
@@ -87,9 +94,9 @@ function formatMain(config) {
             // 非入口文件
             noMainArr.push(`!${mainArr[i]}`);
             // 输出入口文件
-            let inp = config.input.replace('./','');
-            let outp = config.output.replace('./','');
-            outputMainArr.push(mainArr[i].replace(inp,outp));
+            let inp = config.input.replace('./', '');
+            let outp = config.output.replace('./', '');
+            outputMainArr.push(mainArr[i].replace(inp, outp));
         }
     }
     return {
@@ -105,7 +112,7 @@ module.exports = (ops) => {
     try {
         fangfisConfig = require(fangfisConfigPath);
     } catch (e) {
-        console.log(`${chalk.yellow(fangfisConfigPath)} does not exist `);
+        console.log(`${chalk.yellow(fangfisConfigPath)} does not exist!`);
         return;
     }
     let valueParams = ops.valueParams,
@@ -126,6 +133,7 @@ module.exports = (ops) => {
             buildConfig[item] = ops[item];
         }
     });
+    console.log(buildConfig);
     // 格式化入口
     let mainJson = formatMain(buildConfig);
     buildConfig.main = mainJson.main;
@@ -133,16 +141,15 @@ module.exports = (ops) => {
     buildConfig.outputMain = mainJson.outputMain;
     // 自定义输出目录兼容
     buildConfig.output = buildConfig.output.split('/').reverse()[0];
-    co(function*() {
+    co(function* () {
         let eventStr = 'css js img';
         // 参数判断
         let hasOps = false;
         // 判断是否监控
         let watch = buildConfig.watch;
         let isWatched = false;
-
         if (!buildConfig.main) return;
-        eventStr.replace(/\w+/g, function(key) {
+        eventStr.replace(/\w+/g, function (key) {
             if (buildConfig.hasOwnProperty(key)) {
                 hasOps = true;
                 watch && (isWatched = true) && gulpbuild.watch(buildConfig, key);
