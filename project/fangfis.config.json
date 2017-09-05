@@ -3,12 +3,12 @@
         "input": "./dev",
         "output": "./static",
         "base": "./dev/js",
-        "main": "entry_*",
+        "main": "main",
         "combo": {
             "ignore": [
                 "jquery"
             ],
-            "async": ["main.js"],
+            "addMod": ["main2"],
             "config": {
                 "alias": {
                     "jquery": "jquery",
