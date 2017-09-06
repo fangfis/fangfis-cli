@@ -25,9 +25,8 @@
             "host": "localhost",
             "user": "anonymous",
             "pass": "anonymous@",
-            "input": "./dev",
+            "input": "./static",
             "output": "./static",
-            "parallel": 5,
             "port": 21,
             "idleTimeout": 100,
             "maxConnections": 5
@@ -36,9 +35,8 @@
             "host": "localhost",
             "user": "anonymous",
             "pass": "anonymous@",
-            "input": "./dev",
+            "input": "./static",
             "output": "./static",
-            "parallel": 5,
             "port": 21,
             "idleTimeout": 100,
             "maxConnections": 5
